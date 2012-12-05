@@ -10,6 +10,24 @@ commands:
         usage: /<command>
         
 permissions:
-   soundboard.*:
+   soundboard.main:
       description: Allows you to use soundboard
+      default: false
+   soundboard.target.self:
+      description: Allows you to use target self
+      default: false
+   soundboard.target.self_only:
+      description: Allows you to use target self_only
+      default: false
+   soundboard.target.player:
+      description: Allows you to use target player
+      default: false
+   soundboard.target.player_only:
+      description: Allows you to use target player_only
+      default: false
+   soundboard.target.location:
+      description: Allows you to use target location
+      default: false
+   soundboard.target.all:
+      description: Allows you to use target all
       default: false

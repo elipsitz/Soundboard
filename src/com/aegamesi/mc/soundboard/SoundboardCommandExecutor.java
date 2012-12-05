@@ -29,7 +29,7 @@ public class SoundboardCommandExecutor implements CommandExecutor {
 			SoundboardUtil.message(sender, "&cYou can't use Soundboard from the console!");
 			return true;
 		}
-		if (!sender.hasPermission("soundboard.*")) {
+		if (!sender.hasPermission("soundboard.main")) {
 			SoundboardUtil.message(sender, "&cYou don't have permission to do that!");
 			return true;
 		}
@@ -108,26 +108,46 @@ public class SoundboardCommandExecutor implements CommandExecutor {
 				return true;
 			}
 			if (args[1].equalsIgnoreCase("all")) {
+				if (!sender.hasPermission("soundboard.target.all")) {
+					SoundboardUtil.message(sender, "&cYou don't have permission to do that!");
+					return true;
+				}
 				SoundboardPlugin.playerMap.get(p.getName()).target = SoundboardPlayer.TARGET_ALL;
 				SoundboardUtil.message(sender, "Target set to all.");
 				return true;
 			}
 			if (args[1].equalsIgnoreCase("location")) {
+				if (!sender.hasPermission("soundboard.target.location")) {
+					SoundboardUtil.message(sender, "&cYou don't have permission to do that!");
+					return true;
+				}
 				SoundboardPlugin.playerMap.get(p.getName()).doSelectLocation = true;
 				SoundboardUtil.message(sender, "Click a location to set target.");
 				return true;
 			}
 			if (args[1].equalsIgnoreCase("self")) {
+				if (!sender.hasPermission("soundboard.target.self")) {
+					SoundboardUtil.message(sender, "&cYou don't have permission to do that!");
+					return true;
+				}
 				SoundboardPlugin.playerMap.get(p.getName()).target = SoundboardPlayer.TARGET_SELF;
 				SoundboardUtil.message(sender, "Target set to self.");
 				return true;
 			}
 			if (args[1].equalsIgnoreCase("self_only")) {
+				if (!sender.hasPermission("soundboard.target.self_only")) {
+					SoundboardUtil.message(sender, "&cYou don't have permission to do that!");
+					return true;
+				}
 				SoundboardPlugin.playerMap.get(p.getName()).target = SoundboardPlayer.TARGET_SELF_ONLY;
 				SoundboardUtil.message(sender, "Target set to self only.");
 				return true;
 			}
 			if (args[1].equalsIgnoreCase("player")) {
+				if (!sender.hasPermission("soundboard.target.player")) {
+					SoundboardUtil.message(sender, "&cYou don't have permission to do that!");
+					return true;
+				}
 				if (args.length < 3) {
 					SoundboardUtil.message(sender, "Error: Invalid arguments for /sb target player");
 					return true;
@@ -143,6 +163,10 @@ public class SoundboardCommandExecutor implements CommandExecutor {
 				return true;
 			}
 			if (args[1].equalsIgnoreCase("player_only")) {
+				if (!sender.hasPermission("soundboard.target.player_only")) {
+					SoundboardUtil.message(sender, "&cYou don't have permission to do that!");
+					return true;
+				}
 				if (args.length < 3) {
 					SoundboardUtil.message(sender, "Error: Invalid arguments for /sb target player_only");
 					return true;
