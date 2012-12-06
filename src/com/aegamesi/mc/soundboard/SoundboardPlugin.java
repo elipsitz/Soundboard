@@ -3,6 +3,7 @@ package com.aegamesi.mc.soundboard;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -19,6 +20,9 @@ public final class SoundboardPlugin extends JavaPlugin implements Listener {
 		// saveDefaultConfig();
 
 		playerMap = new HashMap<String, SoundboardPlayer>();
+		
+		for(Player p : Bukkit.getOnlinePlayers())
+			playerMap.put(p.getName(), new SoundboardPlayer(p.getName()));
 	}
 
 	public void onDisable() {
