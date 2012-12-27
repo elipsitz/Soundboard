@@ -20,8 +20,8 @@ public final class SoundboardPlugin extends JavaPlugin implements Listener {
 		// saveDefaultConfig();
 
 		playerMap = new HashMap<String, SoundboardPlayer>();
-		
-		for(Player p : Bukkit.getOnlinePlayers())
+
+		for (Player p : Bukkit.getOnlinePlayers())
 			playerMap.put(p.getName(), new SoundboardPlayer(p.getName()));
 	}
 
@@ -37,7 +37,7 @@ public final class SoundboardPlugin extends JavaPlugin implements Listener {
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent evt) {
 		if (playerMap.containsKey(evt.getPlayer().getName())) {
-			if(playerMap.get(evt.getPlayer().getName()).task != -1) {
+			if (playerMap.get(evt.getPlayer().getName()).task != -1) {
 				Bukkit.getServer().getScheduler().cancelTask(playerMap.get(evt.getPlayer().getName()).task);
 			}
 			playerMap.remove(evt.getPlayer().getName());
@@ -46,16 +46,15 @@ public final class SoundboardPlugin extends JavaPlugin implements Listener {
 
 	@EventHandler
 	public void onPlayerInteractBlock(PlayerInteractEvent evt) {
-		if(playerMap.get(evt.getPlayer().getName()).doSelectLocation) {
+		if (playerMap.get(evt.getPlayer().getName()).doSelectLocation) {
 			playerMap.get(evt.getPlayer().getName()).doSelectLocation = false;
 			playerMap.get(evt.getPlayer().getName()).targetLocation = evt.getPlayer().getTargetBlock(null, 200).getLocation();
 			playerMap.get(evt.getPlayer().getName()).target = SoundboardPlayer.TARGET_LOCATION;
 			SoundboardUtil.message(evt.getPlayer(), "Target set to location.");
 		}
-		
+
 		int itemid = evt.getPlayer().getItemInHand() == null ? 0 : evt.getPlayer().getItemInHand().getTypeId();
-		if (itemid == playerMap.get(evt.getPlayer().getName()).bound) {
+		if (itemid == playerMap.get(evt.getPlayer().getName()).bound)
 			playerMap.get(evt.getPlayer().getName()).play();
-		}
 	}
 }

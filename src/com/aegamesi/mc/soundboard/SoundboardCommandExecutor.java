@@ -1,12 +1,14 @@
 package com.aegamesi.mc.soundboard;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 
 public class SoundboardCommandExecutor implements CommandExecutor {
 	public SoundboardPlugin plugin;
@@ -53,20 +55,41 @@ public class SoundboardCommandExecutor implements CommandExecutor {
 			SoundboardUtil.message(sender, "Unbound");
 			return true;
 		}
-		if (args[0].equalsIgnoreCase("set")) {
+		if (args[0].equalsIgnoreCase("clear")) {
+			SoundboardPlugin.playerMap.get(p.getName()).effects.clear();
+			SoundboardUtil.message(sender, "List Cleared");
+			return true;
+		}
+		if (args[0].equalsIgnoreCase("add")) {
 			if (args.length < 2) {
-				SoundboardUtil.message(sender, "Error: Invalid arguments for /sb set");
+				SoundboardUtil.message(sender, "Error: Invalid arguments for /sb add");
 				return true;
 			}
-			Sound sound = null;
-			try {
-				sound = Sound.valueOf(args[1].toUpperCase());
-			} catch (IllegalArgumentException e) {
-				SoundboardUtil.message(sender, "Error: Sound not found: " + args[1].toUpperCase());
-				return true;
+			String input = args[1];
+
+			if (input.equalsIgnoreCase("held")) {
+				ItemStack stack = p.getItemInHand();
+				if(stack.getType() == Material.FIREWORK) {
+					SoundboardEffect eff = new SoundboardEffect(SoundboardEffect.Type.FIREWORK);
+					eff.fireworkMeta = (FireworkMeta) stack.getItemMeta();
+					SoundboardPlugin.playerMap.get(p.getName()).effects.add(eff);
+					SoundboardUtil.message(sender, "Firework added to list");
+				} else {
+					SoundboardUtil.message(sender, "Error: Item held is not a firework");
+				}
+			} else {
+				Sound sound = null;
+				try {
+					sound = Sound.valueOf(args[1].toUpperCase());
+				} catch (IllegalArgumentException e) {
+					SoundboardUtil.message(sender, "Error: Sound not found: " + args[1].toUpperCase());
+					return true;
+				}
+				SoundboardUtil.message(sender, "Sound added to list: " + args[1].toUpperCase());
+				SoundboardEffect eff = new SoundboardEffect(SoundboardEffect.Type.SOUND);
+				eff.sound = sound;
+				SoundboardPlugin.playerMap.get(p.getName()).effects.add(eff);
 			}
-			SoundboardUtil.message(sender, "Sound set to " + args[1].toUpperCase());
-			SoundboardPlugin.playerMap.get(p.getName()).sound = sound;
 			return true;
 		}
 		if (args[0].equalsIgnoreCase("cancel")) {
@@ -189,7 +212,8 @@ public class SoundboardCommandExecutor implements CommandExecutor {
 	public void sendHelp(CommandSender to, int page) {
 		SoundboardUtil.message(to, " &e/sb bind - &7Binds a specific item to soundboard");
 		SoundboardUtil.message(to, " &e/sb unbind - &7Unbinds your item");
-		SoundboardUtil.message(to, " &e/sb set <sound> - &7Sets the desired sound");
+		SoundboardUtil.message(to, " &e/sb add <name|held> - &7Adds the desired effect to the list");
+		SoundboardUtil.message(to, " &e/sb clear - &7Clears your effect list");
 		SoundboardUtil.message(to, " &e/sb repeat <period in ticks> - &7Repeats the current sound + target every x ticks");
 		SoundboardUtil.message(to, " &e/sb cancel - &7Cancels the current repeat loop");
 		SoundboardUtil.message(to, " &e/sb target - &7Sets the target for sounds");
